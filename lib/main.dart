@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
       home: const MyHomePage(title: 'Pocket Track'),
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
     );
   }
 }
@@ -65,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: theme.onPrimary,
+      backgroundColor: theme.surface,
       appBar: AppBar(
         backgroundColor: theme.primary,
         title: Text(
