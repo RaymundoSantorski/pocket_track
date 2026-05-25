@@ -1,0 +1,18 @@
+enum Category {
+  business,
+  entertainment,
+  general,
+  health,
+  science,
+  sports,
+  technology,
+  food,
+  travel,
+  family,
+  fashion,
+  music,
+  art,
+  culture,
+  history,
+  education,
+}
