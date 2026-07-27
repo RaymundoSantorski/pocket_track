@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/core/database.dart';
+import 'package:pocket_track/homescreen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  Database db = Database();
+  await db.initialize();
+  runApp(ChangeNotifierProvider(create: (_) => db, child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,39 +50,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: lightColorScheme, useMaterial3: true),
       darkTheme: ThemeData(colorScheme: darkColorScheme, useMaterial3: true),
-      home: const MyHomePage(title: 'Pocket Track'),
+      home: const HomeScreen(title: 'Pocket Track'),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-    return Scaffold(
-      backgroundColor: theme.surface,
-      appBar: AppBar(
-        backgroundColor: theme.primary,
-        title: Text(
-          widget.title,
-          style: TextStyle(
-            color: theme.onPrimary,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Inter",
-          ),
-        ),
-      ),
     );
   }
 }

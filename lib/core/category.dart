@@ -15,4 +15,5 @@ enum Category {
   culture,
   history,
   education,
+  utilities,
 }

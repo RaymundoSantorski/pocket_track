@@ -1,13 +1,21 @@
+import 'package:isar/isar.dart';
+import 'package:pocket_track/core/category.dart';
+part 'expense.g.dart';
+
+@collection
 class Expense {
-  final String id;
-  final String description;
+  Id id = Isar.autoIncrement;
+  final bool isExpense;
+  final String? description;
   final double amount;
   final DateTime date;
-  final String category;
+  @enumerated
+  final Category category;
 
   Expense({
     required this.id,
-    required this.description,
+    this.isExpense = true,
+    this.description,
     required this.amount,
     required this.date,
     required this.category,
