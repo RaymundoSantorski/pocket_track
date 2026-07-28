@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocket_track/core/database.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
+import 'package:pocket_track/screens/expense_details_screen.dart';
 import 'package:pocket_track/widgets/filter_options.dart';
 import 'package:provider/provider.dart';
 
@@ -115,7 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         final expense = itemsToShow[index];
                         return InkWell(
                           onTap: () {
-                            debugPrint('Expense tapped: ${expense.id}');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ExpenseDetailsScreen(expense: expense),
+                              ),
+                            );
                           },
                           child: Container(
                             color: index % 2 == 0
