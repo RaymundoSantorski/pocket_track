@@ -11,11 +11,17 @@ class ExpenseDetailsScreen extends StatefulWidget {
 
 class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   final TextEditingController amountController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     amountController.text = widget.expense.amount.toString();
+    descriptionController.text = widget.expense.description?.toString() ?? '';
+    categoryController.text = widget.expense.category.name;
+    typeController.text = widget.expense.isExpense ? 'Gasto' : 'Ingreso';
   }
 
   @override
@@ -25,7 +31,30 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
         title: Text('Details'),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.edit))],
       ),
-      body: Column(children: [TextField(controller: amountController)]),
+      body: Column(
+        children: [
+          TextField(
+            controller: amountController,
+            decoration: InputDecoration(label: Text('Monto')),
+            enabled: false,
+          ),
+          TextField(
+            controller: descriptionController,
+            decoration: InputDecoration(label: Text('Descripción')),
+            enabled: false,
+          ),
+          TextField(
+            controller: categoryController,
+            decoration: InputDecoration(label: Text('Categoria')),
+            enabled: false,
+          ),
+          TextField(
+            controller: typeController,
+            decoration: InputDecoration(label: Text('Tipo')),
+            enabled: false,
+          ),
+        ],
+      ),
     );
   }
 }
