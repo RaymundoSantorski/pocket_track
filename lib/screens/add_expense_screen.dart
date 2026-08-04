@@ -20,6 +20,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   bool isExpense = true;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.expense != null) {
+      _controller.text = '${widget.expense!.amount}';
+      _descriptionController.text = widget.expense!.description ?? '';
+      selectedCategory = widget.expense!.category;
+      isExpense = widget.expense!.isExpense;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Database db = context.read<Database>();
     bool handleAdd() {
@@ -27,16 +38,24 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       double value = double.parse(_controller.text);
       String description = _descriptionController.text;
       if (value > 0 && selectedCategory != null) {
-        db.addExpense(
-          Expense(
-            amount: value,
-            category: selectedCategory!,
-            isExpense: isExpense,
-            date: DateTime.now(),
-            id: DateTime.now().millisecondsSinceEpoch,
-            description: description,
-          ),
-        );
+        Expense newExpense = widget.expense == null
+            ? Expense(
+                amount: value,
+                category: selectedCategory!,
+                isExpense: isExpense,
+                date: DateTime.now(),
+                description: description,
+              )
+            : widget.expense!;
+        if (widget.expense != null) {
+          newExpense
+            ..amount = value
+            ..category = selectedCategory!
+            ..isExpense = isExpense
+            ..date = DateTime.now()
+            ..description = description;
+        }
+        db.addExpense(newExpense);
       }
       return true;
     }

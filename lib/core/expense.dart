@@ -5,15 +5,14 @@ part 'expense.g.dart';
 @collection
 class Expense {
   Id id = Isar.autoIncrement;
-  final bool isExpense;
-  final String? description;
-  final double amount;
-  final DateTime date;
+  bool isExpense;
+  String? description;
+  double amount;
+  DateTime date;
   @enumerated
-  final Category category;
+  Category category;
 
   Expense({
-    required this.id,
     this.isExpense = true,
     this.description,
     required this.amount,

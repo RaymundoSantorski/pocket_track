@@ -35,7 +35,9 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => AddExpenseScreen()),
+                MaterialPageRoute(
+                  builder: (_) => AddExpenseScreen(expense: widget.expense),
+                ),
               );
             },
             icon: Icon(Icons.edit),

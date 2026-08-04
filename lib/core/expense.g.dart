@@ -98,9 +98,9 @@ Expense _expenseDeserialize(
         Category.business,
     date: reader.readDateTime(offsets[2]),
     description: reader.readStringOrNull(offsets[3]),
-    id: id,
     isExpense: reader.readBoolOrNull(offsets[4]) ?? true,
   );
+  object.id = id;
   return object;
 }
 
