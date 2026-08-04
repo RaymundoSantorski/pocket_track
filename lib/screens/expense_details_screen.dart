@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/core/expense.dart';
+import 'package:pocket_track/screens/add_expense_screen.dart';
 
 class ExpenseDetailsScreen extends StatefulWidget {
   final Expense expense;
@@ -29,7 +30,17 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details'),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.edit))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AddExpenseScreen()),
+              );
+            },
+            icon: Icon(Icons.edit),
+          ),
+        ],
       ),
       body: Column(
         children: [

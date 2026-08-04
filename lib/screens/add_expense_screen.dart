@@ -6,7 +6,8 @@ import 'package:pocket_track/screens/category_items.dart';
 import 'package:provider/provider.dart';
 
 class AddExpenseScreen extends StatefulWidget {
-  const AddExpenseScreen({super.key});
+  const AddExpenseScreen({super.key, this.expense});
+  final Expense? expense;
 
   @override
   State<AddExpenseScreen> createState() => _AddExpenseScreenState();
