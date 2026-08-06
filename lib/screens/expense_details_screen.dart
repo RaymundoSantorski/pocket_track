@@ -28,22 +28,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Details'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => AddExpenseScreen(expense: widget.expense),
-                ),
-              );
-            },
-            icon: Icon(Icons.edit),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text('Details')),
       body: Column(
         children: [
           TextField(
@@ -66,6 +51,57 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
             decoration: InputDecoration(label: Text('Tipo')),
             enabled: false,
           ),
+          // SizedBox(height: 60),
+          Expanded(child: SizedBox()),
+          Container(
+            width: 180,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              border: Border.all(color: Colors.blueAccent, width: 3.0),
+            ),
+            child: TextButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AddExpenseScreen(expense: widget.expense),
+                  ),
+                );
+              },
+              label: Text(
+                'Editar',
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+              ),
+              icon: Icon(Icons.edit, color: Colors.blueAccent, size: 22),
+            ),
+          ),
+          SizedBox(height: 20),
+          Container(
+            width: 180,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              color: Colors.redAccent,
+            ),
+            child: TextButton.icon(
+              onPressed: () {},
+              label: Text(
+                'Eliminar',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+              ),
+              icon: Icon(Icons.delete, color: Colors.white, size: 22),
+            ),
+          ),
+          SizedBox(height: 50),
         ],
       ),
     );
