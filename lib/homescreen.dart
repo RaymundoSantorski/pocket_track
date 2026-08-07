@@ -16,17 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Expense> itemsToShow = [];
   bool? isExpense;
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        itemsToShow = context.read<Database>().transactions;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,23 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isExpense = value;
       });
-      switch (value) {
-        case true:
-          setState(() {
-            itemsToShow = expenses;
-          });
-          return;
-        case false:
-          setState(() {
-            itemsToShow = incomes;
-          });
-          return;
-        default:
-          setState(() {
-            itemsToShow = transactions;
-          });
-      }
-      setState(() {});
     }
 
     return Scaffold(
@@ -110,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       body: SafeArea(
-        child: itemsToShow.isEmpty
+        child: transactions.isEmpty
             ? Container()
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -138,66 +111,26 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                     ),
                     SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final expense = itemsToShow[index];
-                        if (index == 0) {
-                          currentDate = expense.date;
-                          lastDate = DateTime.fromMicrosecondsSinceEpoch(0);
-                        } else {
-                          lastDate = currentDate;
-                          currentDate = expense.date;
-                        }
-                        if (lastDate.day != currentDate.day) {
-                          return Column(
-                            children: [
-                              Container(
-                                color: Color(0x4A4A1ABA),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: 60,
-                                      height: 30,
-                                      child: Text(
-                                        weekDays[currentDate.weekday - 1],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 30,
-                                      child: Text('${currentDate.day}'),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 30,
-                                      child: Text(
-                                        months[currentDate.month - 1],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 60,
-                                      height: 30,
-                                      child: Text('${currentDate.year}'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => ExpenseDetailsScreen(
-                                        expense: expense,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  color: index % 2 == 0
-                                      ? Color(0xFFFFFFFF)
-                                      : Color(0xEEEEEEEE),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          List<Expense> itemsToShow = isExpense == null
+                              ? transactions
+                              : isExpense == true
+                              ? expenses
+                              : incomes;
+                          final expense = itemsToShow[index];
+                          if (index == 0) {
+                            currentDate = expense.date;
+                            lastDate = DateTime.fromMicrosecondsSinceEpoch(0);
+                          } else {
+                            lastDate = currentDate;
+                            currentDate = expense.date;
+                          }
+                          if (lastDate.day != currentDate.day) {
+                            return Column(
+                              children: [
+                                Container(
+                                  color: Color(0x4A4A1ABA),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
@@ -205,96 +138,153 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       SizedBox(
                                         width: 60,
-                                        height: 40,
-                                        child: expense.isExpense
-                                            ? Text('Gasto')
-                                            : Text('Ingreso'),
-                                      ),
-                                      SizedBox(
-                                        width: 60,
-                                        height: 40,
+                                        height: 30,
                                         child: Text(
-                                          expense.category.name,
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                          weekDays[currentDate.weekday - 1],
                                         ),
                                       ),
                                       SizedBox(
                                         width: 60,
-                                        height: 40,
-                                        child: Text(expense.description ?? ''),
+                                        height: 30,
+                                        child: Text('${currentDate.day}'),
                                       ),
                                       SizedBox(
                                         width: 60,
-                                        height: 40,
+                                        height: 30,
                                         child: Text(
-                                          '${expense.amount}',
-                                          style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                          months[currentDate.month - 1],
                                         ),
+                                      ),
+                                      SizedBox(
+                                        width: 60,
+                                        height: 30,
+                                        child: Text('${currentDate.year}'),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        }
-                        return InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ExpenseDetailsScreen(expense: expense),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            color: index % 2 == 0
-                                ? Color(0xFFFFFFFF)
-                                : Color(0xEEEEEEEE),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 60,
-                                  child: expense.isExpense
-                                      ? Text('Gasto')
-                                      : Text('ingreso'),
-                                ),
-                                SizedBox(
-                                  width: 60,
-                                  height: 40,
-                                  child: Text(
-                                    expense.category.name,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 60,
-                                  height: 40,
-                                  child: Text(expense.description ?? ''),
-                                ),
-                                SizedBox(
-                                  width: 60,
-                                  height: 40,
-                                  child: Text(
-                                    '${expense.amount}',
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => ExpenseDetailsScreen(
+                                          expense: expense,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    color: index % 2 == 0
+                                        ? Color(0xFFFFFFFF)
+                                        : Color(0xEEEEEEEE),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 60,
+                                          height: 40,
+                                          child: expense.isExpense
+                                              ? Text('Gasto')
+                                              : Text('Ingreso'),
+                                        ),
+                                        SizedBox(
+                                          width: 60,
+                                          height: 40,
+                                          child: Text(
+                                            expense.category.name,
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 60,
+                                          height: 40,
+                                          child: Text(
+                                            expense.description ?? '',
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 60,
+                                          height: 40,
+                                          child: Text(
+                                            '${expense.amount}',
+                                            style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ],
+                            );
+                          }
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ExpenseDetailsScreen(expense: expense),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              color: index % 2 == 0
+                                  ? Color(0xFFFFFFFF)
+                                  : Color(0xEEEEEEEE),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: 60,
+                                    child: expense.isExpense
+                                        ? Text('Gasto')
+                                        : Text('ingreso'),
+                                  ),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 40,
+                                    child: Text(
+                                      expense.category.name,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 40,
+                                    child: Text(expense.description ?? ''),
+                                  ),
+                                  SizedBox(
+                                    width: 60,
+                                    height: 40,
+                                    child: Text(
+                                      '${expense.amount}',
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }, childCount: itemsToShow.length),
+                          );
+                        },
+                        childCount:
+                            (isExpense == null
+                                    ? transactions
+                                    : isExpense == true
+                                    ? expenses
+                                    : incomes)
+                                .length,
+                      ),
                     ),
                   ],
                 ),

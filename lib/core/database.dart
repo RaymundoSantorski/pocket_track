@@ -35,4 +35,11 @@ class Database extends ChangeNotifier {
     totalIncome = incomes.fold(0, (carry, curr) => carry + curr.amount);
     notifyListeners();
   }
+
+  Future<void> delete(int id) async {
+    await isar.writeTxn(() async {
+      isar.expenses.delete(id);
+    });
+    loadExpenses();
+  }
 }
