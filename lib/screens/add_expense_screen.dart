@@ -16,7 +16,7 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  Category? selectedCategory = Category.business;
+  Categories? selectedCategory = Categories.business;
   bool isExpense = true;
 
   @override
@@ -121,13 +121,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   hint: Text('Clothes shopping'),
                 ),
               ),
-              DropdownButton<Category>(
+              DropdownButton<Categories>(
                 value: selectedCategory,
                 items: categoryItems(),
                 selectedItemBuilder: (context) {
                   return categoryItems();
                 },
-                onChanged: (Category? value) {
+                onChanged: (Categories? value) {
                   setState(() {
                     selectedCategory = value;
                   });

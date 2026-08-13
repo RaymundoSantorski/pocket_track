@@ -95,7 +95,7 @@ Expense _expenseDeserialize(
   final object = Expense(
     amount: reader.readDouble(offsets[0]),
     category: _ExpensecategoryValueEnumMap[reader.readByteOrNull(offsets[1])] ??
-        Category.business,
+        Categories.business,
     date: reader.readDateTime(offsets[2]),
     description: reader.readStringOrNull(offsets[3]),
     isExpense: reader.readBoolOrNull(offsets[4]) ?? true,
@@ -115,7 +115,7 @@ P _expenseDeserializeProp<P>(
       return (reader.readDouble(offset)) as P;
     case 1:
       return (_ExpensecategoryValueEnumMap[reader.readByteOrNull(offset)] ??
-          Category.business) as P;
+          Categories.business) as P;
     case 2:
       return (reader.readDateTime(offset)) as P;
     case 3:
@@ -147,23 +147,23 @@ const _ExpensecategoryEnumValueMap = {
   'utilities': 16,
 };
 const _ExpensecategoryValueEnumMap = {
-  0: Category.business,
-  1: Category.entertainment,
-  2: Category.general,
-  3: Category.health,
-  4: Category.science,
-  5: Category.sports,
-  6: Category.technology,
-  7: Category.food,
-  8: Category.travel,
-  9: Category.family,
-  10: Category.fashion,
-  11: Category.music,
-  12: Category.art,
-  13: Category.culture,
-  14: Category.history,
-  15: Category.education,
-  16: Category.utilities,
+  0: Categories.business,
+  1: Categories.entertainment,
+  2: Categories.general,
+  3: Categories.health,
+  4: Categories.science,
+  5: Categories.sports,
+  6: Categories.technology,
+  7: Categories.food,
+  8: Categories.travel,
+  9: Categories.family,
+  10: Categories.fashion,
+  11: Categories.music,
+  12: Categories.art,
+  13: Categories.culture,
+  14: Categories.history,
+  15: Categories.education,
+  16: Categories.utilities,
 };
 
 Id _expenseGetId(Expense object) {
@@ -318,7 +318,7 @@ extension ExpenseQueryFilter
   }
 
   QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryEqualTo(
-      Category value) {
+      Categories value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'category',
@@ -328,7 +328,7 @@ extension ExpenseQueryFilter
   }
 
   QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryGreaterThan(
-    Category value, {
+    Categories value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -341,7 +341,7 @@ extension ExpenseQueryFilter
   }
 
   QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryLessThan(
-    Category value, {
+    Categories value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -354,8 +354,8 @@ extension ExpenseQueryFilter
   }
 
   QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryBetween(
-    Category lower,
-    Category upper, {
+    Categories lower,
+    Categories upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -824,7 +824,7 @@ extension ExpenseQueryProperty
     });
   }
 
-  QueryBuilder<Expense, Category, QQueryOperations> categoryProperty() {
+  QueryBuilder<Expense, Categories, QQueryOperations> categoryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'category');
     });

@@ -10,7 +10,7 @@ class Expense {
   double amount;
   DateTime date;
   @enumerated
-  Category category;
+  Categories category;
 
   Expense({
     this.isExpense = true,

@@ -1,4 +1,6 @@
-enum Category {
+import 'package:isar/isar.dart';
+
+enum Categories {
   business,
   entertainment,
   general,
@@ -16,4 +18,11 @@ enum Category {
   history,
   education,
   utilities,
+}
+
+@collection
+class Category {
+  Id id = Isar.autoIncrement;
+  late String type;
+  late String name;
 }
