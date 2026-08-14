@@ -1,0 +1,27 @@
+import 'package:isar/isar.dart';
+import 'package:pocket_track/core/expense.dart';
+
+class ExpenseRepository {
+  late Isar isar;
+  ExpenseRepository({required this.isar});
+
+  Future<void> save(Expense expense) async {
+    await isar.writeTxn(() async {
+      await isar.expenses.put(expense);
+    });
+  }
+
+  Future<Expense?> get(Id id) async {
+    return await isar.expenses.get(id);
+  }
+
+  Future<List<Expense>> getAll() async {
+    return await isar.expenses.where().findAll();
+  }
+
+  Future<void> delete(int id) async {
+    await isar.writeTxn(() async {
+      isar.expenses.delete(id);
+    });
+  }
+}

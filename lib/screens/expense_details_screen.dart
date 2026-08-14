@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/core/database.dart';
 import 'package:pocket_track/core/expense.dart';
+import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
 
   Future<void> confirmDelete(
     BuildContext context,
-    Database db,
+    ExpenseProvider db,
     Expense expense,
   ) async {
     return showDialog<void>(
@@ -89,7 +89,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
                         label: 'Deshacer',
                         textColor: Colors.white,
                         onPressed: () {
-                          db.addExpense(expense);
+                          db.save(expense);
                         },
                       ),
                       backgroundColor: Colors.redAccent,
@@ -106,7 +106,11 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Database db = context.watch<Database>();
+    ExpenseProvider db = context.watch<ExpenseProvider>();
+
+    void pop() {
+      Navigator.pop(context);
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text('Details')),
@@ -172,7 +176,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
             child: TextButton.icon(
               onPressed: () async {
                 await confirmDelete(context, db, widget.expense);
-                Navigator.pop(context);
+                pop();
               },
               label: Text(
                 'Eliminar',

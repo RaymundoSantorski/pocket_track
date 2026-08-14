@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/core/database.dart';
 import 'package:pocket_track/core/expense.dart';
+import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
 import 'package:pocket_track/widgets/expense_list.dart';
 import 'package:provider/provider.dart';
@@ -19,11 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Expense> transactions = context.watch<Database>().transactions;
-    List<Expense> expenses = context.watch<Database>().expenses;
-    List<Expense> incomes = context.watch<Database>().incomes;
-    double totalIncome = context.watch<Database>().totalIncome;
-    double totalExpense = context.watch<Database>().totalExpense;
+    List<Expense> transactions = context.watch<ExpenseProvider>().transactions;
+    List<Expense> expenses = context.watch<ExpenseProvider>().expenses;
+    List<Expense> incomes = context.watch<ExpenseProvider>().incomes;
+    double totalIncome = context.watch<ExpenseProvider>().totalIncome;
+    double totalExpense = context.watch<ExpenseProvider>().totalExpense;
 
     ColorScheme theme = Theme.of(context).colorScheme;
 

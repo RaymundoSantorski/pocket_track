@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/core/category.dart';
-import 'package:pocket_track/core/database.dart';
 import 'package:pocket_track/core/expense.dart';
+import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/category_items.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +32,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Database db = context.read<Database>();
+    ExpenseProvider db = context.read<ExpenseProvider>();
     bool handleAdd() {
       if (_controller.text.isEmpty) return true;
       double value = double.parse(_controller.text);
@@ -55,7 +55,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ..date = DateTime.now()
             ..description = description;
         }
-        db.addExpense(newExpense);
+        db.save(newExpense);
       }
       return true;
     }

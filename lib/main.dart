@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/core/category.dart';
+import 'package:pocket_track/core/category_provider.dart';
+import 'package:pocket_track/core/category_repository.dart';
 import 'package:pocket_track/core/database.dart';
+import 'package:pocket_track/core/expense_provider.dart';
+import 'package:pocket_track/core/expense_repository.dart';
 import 'package:pocket_track/homescreen.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Database db = Database();
   await db.initialize();
-  runApp(ChangeNotifierProvider(create: (_) => db, child: MyApp()));
+  ExpenseRepository expenseRepository = ExpenseRepository(isar: db.isar);
+  CategoryRepository categoryRepository = CategoryRepository(isar: db.isar);
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ExpenseProvider(db: expenseRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CategoryProvider(db: categoryRepository),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
