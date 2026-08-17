@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/category_repository.dart';
 import 'package:pocket_track/core/database.dart';
