@@ -12,6 +12,7 @@ class CategoryProvider extends ChangeNotifier {
 
   Future<void> load() async {
     categories = await db.getAll();
+    notifyListeners();
   }
 
   Future<void> save(Category category) async {
