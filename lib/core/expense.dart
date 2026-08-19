@@ -9,14 +9,14 @@ class Expense {
   String? description;
   double amount;
   DateTime date;
-  @enumerated
-  Categories category;
+
+  final category = IsarLink<Category>();
 
   Expense({
     this.isExpense = true,
     this.description,
     required this.amount,
     required this.date,
-    required this.category,
   });
 }
+// 
