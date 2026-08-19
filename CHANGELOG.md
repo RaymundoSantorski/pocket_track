@@ -11,4 +11,9 @@
 # Pocket Track v0.2
 - View details
 - Edit transactions
-## Status: Pending
+## Status: Finished
+
+# Pocket Track v0.3
+- Category model
+- Create and use categories
+
