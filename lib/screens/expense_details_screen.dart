@@ -12,6 +12,7 @@ class ExpenseDetailsScreen extends StatefulWidget {
   State<ExpenseDetailsScreen> createState() => _ExpenseDetailsScreenState();
 }
 
+//
 class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -23,7 +24,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
     super.initState();
     amountController.text = widget.expense.amount.toString();
     descriptionController.text = widget.expense.description?.toString() ?? '';
-    categoryController.text = widget.expense.category.name;
+    categoryController.text = widget.expense.category.value?.name ?? '';
     typeController.text = widget.expense.isExpense ? 'Gasto' : 'Ingreso';
   }
 

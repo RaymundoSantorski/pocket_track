@@ -133,7 +133,7 @@ Widget expenseList({
                               width: 60,
                               height: 40,
                               child: Text(
-                                expense.category.name,
+                                expense.category.value?.name ?? '',
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -185,7 +185,7 @@ Widget expenseList({
                         width: 60,
                         height: 40,
                         child: Text(
-                          expense.category.name,
+                          expense.category.value?.name ?? '',
                           style: TextStyle(overflow: TextOverflow.ellipsis),
                         ),
                       ),

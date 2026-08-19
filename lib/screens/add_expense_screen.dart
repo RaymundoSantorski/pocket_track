@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_track/core/category.dart';
+import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/category_items.dart';
@@ -16,7 +17,7 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  Categories? selectedCategory = Categories.business;
+  Category? selectedCategory;
   bool isExpense = true;
 
   @override
@@ -25,7 +26,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     if (widget.expense != null) {
       _controller.text = '${widget.expense!.amount}';
       _descriptionController.text = widget.expense!.description ?? '';
-      selectedCategory = widget.expense!.category;
+      selectedCategory = widget.expense!.category.value;
       isExpense = widget.expense!.isExpense;
     }
   }
@@ -33,6 +34,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     ExpenseProvider db = context.read<ExpenseProvider>();
+    List<Category> categories = context.watch<CategoryProvider>().categories;
     bool handleAdd() {
       if (_controller.text.isEmpty) return true;
       double value = double.parse(_controller.text);
@@ -41,7 +43,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         Expense newExpense = widget.expense == null
             ? Expense(
                 amount: value,
-                category: selectedCategory!,
+                // category: selectedCategory!,
                 isExpense: isExpense,
                 date: DateTime.now(),
                 description: description,
@@ -50,7 +52,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         if (widget.expense != null) {
           newExpense
             ..amount = value
-            ..category = selectedCategory!
+            // ..category = selectedCategory!
             ..isExpense = isExpense
             ..date = DateTime.now()
             ..description = description;
@@ -121,18 +123,36 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   hint: Text('Clothes shopping'),
                 ),
               ),
-              DropdownButton<Categories>(
-                value: selectedCategory,
-                items: categoryItems(),
-                selectedItemBuilder: (context) {
-                  return categoryItems();
-                },
-                onChanged: (Categories? value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
-              ),
+              categories.isNotEmpty
+                  ? DropdownButton<Category>(
+                      value: categories[0],
+                      items: [
+                        ...categories.map(
+                          (category) => DropdownMenuItem(
+                            onTap: () {},
+                            value: category,
+                            child: Text(category.name),
+                          ),
+                        ),
+                      ],
+                      selectedItemBuilder: (context) {
+                        return [
+                          ...categories.map(
+                            (category) => DropdownMenuItem(
+                              onTap: () {},
+                              value: category,
+                              child: Text(category.name),
+                            ),
+                          ),
+                        ];
+                      },
+                      onChanged: (Category? value) {
+                        setState(() {
+                          selectedCategory = value;
+                        });
+                      },
+                    )
+                  : SizedBox.shrink(),
               TextButton(
                 child: Text('Guardar'),
                 onPressed: () {
