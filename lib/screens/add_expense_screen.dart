@@ -43,7 +43,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         Expense newExpense = widget.expense == null
             ? Expense(
                 amount: value,
-                // category: selectedCategory!,
                 isExpense: isExpense,
                 date: DateTime.now(),
                 description: description,
@@ -57,6 +56,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ..date = DateTime.now()
             ..description = description;
         }
+        newExpense.category.value = selectedCategory;
         db.save(newExpense);
       }
       return true;
@@ -125,11 +125,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
               categories.isNotEmpty
                   ? DropdownButton<Category>(
-                      value: categories[0],
+                      value: selectedCategory,
                       items: [
                         ...categories.map(
                           (category) => DropdownMenuItem(
-                            onTap: () {},
+                            onTap: () {
+                              selectedCategory = category;
+                            },
                             value: category,
                             child: Text(category.name),
                           ),
