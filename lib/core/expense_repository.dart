@@ -8,6 +8,7 @@ class ExpenseRepository {
   Future<void> save(Expense expense) async {
     await isar.writeTxn(() async {
       await isar.expenses.put(expense);
+      await expense.category.save();
     });
   }
 
