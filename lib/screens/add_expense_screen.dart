@@ -3,7 +3,6 @@ import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
-import 'package:pocket_track/screens/category_items.dart';
 import 'package:provider/provider.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -17,6 +16,7 @@ class AddExpenseScreen extends StatefulWidget {
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  int? selectedCategoryId;
   Category? selectedCategory;
   bool isExpense = true;
 
@@ -26,7 +26,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     if (widget.expense != null) {
       _controller.text = '${widget.expense!.amount}';
       _descriptionController.text = widget.expense!.description ?? '';
-      selectedCategory = widget.expense!.category.value;
+      selectedCategoryId = widget.expense!.category.value?.id;
       isExpense = widget.expense!.isExpense;
     }
   }
@@ -35,6 +35,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget build(BuildContext context) {
     ExpenseProvider db = context.read<ExpenseProvider>();
     List<Category> categories = context.watch<CategoryProvider>().categories;
+    if (selectedCategory == null && selectedCategoryId != null) {
+      for (final category in categories) {
+        if (category.id == selectedCategoryId) {
+          selectedCategory = category;
+          break;
+        }
+      }
+    }
     bool handleAdd() {
       if (_controller.text.isEmpty) return true;
       double value = double.parse(_controller.text);
@@ -51,7 +59,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         if (widget.expense != null) {
           newExpense
             ..amount = value
-            // ..category = selectedCategory!
             ..isExpense = isExpense
             ..date = DateTime.now()
             ..description = description;
