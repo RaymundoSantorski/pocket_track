@@ -3,11 +3,30 @@ import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/category_provider.dart';
 import 'package:provider/provider.dart';
 
-class CategoryForm extends StatelessWidget {
-  CategoryForm({super.key});
+class CategoryForm extends StatefulWidget {
+  const CategoryForm({super.key, this.category});
+  final Category? category;
 
+  @override
+  State<CategoryForm> createState() => _CategoryFormState();
+}
+
+class _CategoryFormState extends State<CategoryForm> {
   final TextEditingController categoryNameController = TextEditingController();
+
   final TextEditingController categoryTypeController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.category != null) {
+      if (mounted) {
+        setState(() {
+          categoryNameController.text = widget.category!.name;
+          categoryTypeController.text = widget.category!.type;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +36,17 @@ class CategoryForm extends StatelessWidget {
           categoryTypeController.text.isEmpty) {
         return;
       }
-      Category newCategory = Category()
-        ..name = categoryNameController.text
-        ..type = categoryTypeController.text;
+      if (widget.category != null) {
+        widget.category!.name = categoryNameController.text;
+        widget.category!.type = categoryTypeController.text;
+        db.save(widget.category!);
+      } else {
+        Category newCategory = Category()
+          ..name = categoryNameController.text
+          ..type = categoryTypeController.text;
 
-      db.save(newCategory);
+        db.save(newCategory);
+      }
       Navigator.of(context).pop();
     }
 
