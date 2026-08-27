@@ -26,7 +26,33 @@ class CategoriesScreen extends StatelessWidget {
       body: ListView(
         children: [
           ...categories.map((category) {
-            return Text(category.name);
+            return Card(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [Text(category.name), Text(category.type)],
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => CategoryForm(category: category),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
           }),
         ],
       ),
