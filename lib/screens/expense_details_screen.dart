@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/core/category.dart';
+import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
@@ -22,9 +24,16 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    final categories = context.read<CategoryProvider>().categories;
+    final categoryId = widget.expense.category.value?.id;
+
+    final category = categories.cast<Category?>().firstWhere(
+      (category) => category?.id == categoryId,
+      orElse: () => null,
+    );
     amountController.text = widget.expense.amount.toString();
     descriptionController.text = widget.expense.description?.toString() ?? '';
-    categoryController.text = widget.expense.category.value?.name ?? '';
+    categoryController.text = category?.name ?? '';
     typeController.text = widget.expense.isExpense ? 'Gasto' : 'Ingreso';
   }
 
