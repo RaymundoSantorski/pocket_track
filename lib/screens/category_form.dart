@@ -18,6 +18,7 @@ class _CategoryFormState extends State<CategoryForm> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.category != null) {
       if (mounted) {
         setState(() {
