@@ -78,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 expenses: expenses,
                 incomes: incomes,
                 date: DateTime.now(),
+                context: context,
               ),
       ),
     );
