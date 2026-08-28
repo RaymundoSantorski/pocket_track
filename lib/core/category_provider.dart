@@ -24,4 +24,8 @@ class CategoryProvider extends ChangeNotifier {
     await db.delete(id);
     load();
   }
+
+  Future<Category?> get(int id) async {
+    return await db.get(id);
+  }
 }
