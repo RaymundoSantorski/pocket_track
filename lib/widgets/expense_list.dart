@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/core/category.dart';
+import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/screens/expense_details_screen.dart';
 import 'package:pocket_track/widgets/filter_options.dart';
+import 'package:provider/provider.dart';
 
 final List<String> weekDays = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
@@ -29,9 +32,13 @@ Widget expenseList({
   required List<Expense> expenses,
   required List<Expense> incomes,
   required DateTime date,
+  required BuildContext context,
 }) {
   DateTime currentDate = date;
   DateTime lastDate = date;
+
+  final categories = context.watch<CategoryProvider>().categories;
+
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: CustomScrollView(
@@ -66,6 +73,12 @@ Widget expenseList({
                   ? expenses
                   : incomes;
               final expense = itemsToShow[index];
+              final categoryId = expense.category.value?.id;
+
+              final category = categories.cast<Category?>().firstWhere(
+                (category) => category?.id == categoryId,
+                orElse: () => null,
+              );
               if (index == 0) {
                 currentDate = expense.date;
                 lastDate = DateTime.fromMicrosecondsSinceEpoch(0);
@@ -133,7 +146,7 @@ Widget expenseList({
                               width: 60,
                               height: 40,
                               child: Text(
-                                expense.category.value?.name ?? '',
+                                category?.name ?? '',
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                 ),
