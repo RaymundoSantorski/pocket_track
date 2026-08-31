@@ -57,7 +57,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('¿Estás seguro de que deseas eliminar exta transacción?'),
+                Text('¿Estás seguro de que deseas eliminar esta transacción?'),
                 const SizedBox(height: 10),
                 Text(
                   'Esta acción no se puede deshacer y perderás los datos relacionados con el cliente',
