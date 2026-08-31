@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_repository.dart';
 
