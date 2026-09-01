@@ -33,7 +33,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
     );
     amountController.text = widget.expense.amount.toString();
     descriptionController.text = widget.expense.description?.toString() ?? '';
-    categoryController.text = category?.name ?? '';
+    categoryController.text = category?.name ?? 'Sin categoria';
     typeController.text = widget.expense.isExpense ? 'Gasto' : 'Ingreso';
   }
 

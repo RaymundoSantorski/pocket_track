@@ -146,7 +146,7 @@ Widget expenseList({
                               width: 60,
                               height: 40,
                               child: Text(
-                                category?.name ?? '',
+                                category?.name ?? 'Sin categoría',
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                 ),
