@@ -4,6 +4,7 @@ import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
 import 'package:pocket_track/screens/add_payment_method_screen.dart';
 import 'package:pocket_track/screens/categories_screen.dart';
+import 'package:pocket_track/screens/payment_methods_screen.dart';
 import 'package:pocket_track/widgets/expense_list.dart';
 import 'package:provider/provider.dart';
 
@@ -51,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.payment),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => AddPaymentMethodScreen()),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => PaymentMethodsScreen()));
             },
           ),
           IconButton(
