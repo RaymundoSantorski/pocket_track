@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
+import 'package:pocket_track/screens/add_payment_method_screen.dart';
 import 'package:pocket_track/screens/categories_screen.dart';
 import 'package:pocket_track/widgets/expense_list.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.payment),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => AddPaymentMethodScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.navigate_next),
             onPressed: () {
