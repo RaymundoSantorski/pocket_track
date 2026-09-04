@@ -4,6 +4,8 @@ import 'package:pocket_track/core/category_repository.dart';
 import 'package:pocket_track/core/database.dart';
 import 'package:pocket_track/core/expense_provider.dart';
 import 'package:pocket_track/core/expense_repository.dart';
+import 'package:pocket_track/core/payment_method_provider.dart';
+import 'package:pocket_track/core/payment_method_repository.dart';
 import 'package:pocket_track/homescreen.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,9 @@ Future<void> main() async {
   await db.initialize();
   ExpenseRepository expenseRepository = ExpenseRepository(isar: db.isar);
   CategoryRepository categoryRepository = CategoryRepository(isar: db.isar);
+  PaymentMethodRepository paymentMethodRepository = PaymentMethodRepository(
+    isar: db.isar,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -21,6 +26,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => CategoryProvider(db: categoryRepository),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => PaymentMethodProvider(db: paymentMethodRepository),
         ),
       ],
       child: MyApp(),
