@@ -1,18 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_track/core/payment_method.dart';
+import 'package:pocket_track/core/payment_method_provider.dart';
+import 'package:provider/provider.dart';
 
-class AddPaymentMethodScreen extends StatelessWidget {
-  AddPaymentMethodScreen({super.key});
+class AddPaymentMethodScreen extends StatefulWidget {
+  const AddPaymentMethodScreen({super.key});
 
+  @override
+  State<AddPaymentMethodScreen> createState() => _AddPaymentMethodScreenState();
+}
+
+class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
   final TextEditingController nameController = TextEditingController();
+
+  PaymentType? selectedType;
 
   @override
   Widget build(BuildContext context) {
+    PaymentMethodProvider db = context.read<PaymentMethodProvider>();
+
+    void pop() {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    }
+
+    Future<void> save() async {
+      if (nameController.text.isEmpty || selectedType == null) return;
+      PaymentMethod newMethod = PaymentMethod()
+        ..name = nameController.text
+        ..type = selectedType!;
+      await db.save(newMethod);
+      pop();
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text('Añadir método de pago')),
       body: Column(
         children: [
-          Card(child: Column(children: [TextField(), TextField()])),
-          FilledButton(onPressed: () {}, child: Text('Guardar')),
+          TextField(
+            controller: nameController,
+            decoration: InputDecoration(
+              label: Text('Nombre'),
+              hint: Text('BBVA'),
+            ),
+          ),
+          DropdownButton<PaymentType>(
+            value: selectedType,
+            items: [
+              ...PaymentType.values.map(
+                (category) => DropdownMenuItem(
+                  onTap: () {
+                    selectedType = category;
+                  },
+                  value: category,
+                  child: Text(category.name),
+                ),
+              ),
+            ],
+            selectedItemBuilder: (context) {
+              return [
+                ...PaymentType.values.map(
+                  (category) => DropdownMenuItem(
+                    onTap: () {},
+                    value: category,
+                    child: Text(category.name),
+                  ),
+                ),
+              ];
+            },
+            onChanged: (PaymentType? value) {
+              setState(() {
+                selectedType = value;
+              });
+            },
+          ),
+          FilledButton(onPressed: save, child: Text('Guardar')),
         ],
       ),
     );
