@@ -50,6 +50,12 @@ const ExpenseSchema = CollectionSchema(
       name: r'category',
       target: r'Category',
       single: true,
+    ),
+    r'paymentMethod': LinkSchema(
+      id: 2643625933707299563,
+      name: r'paymentMethod',
+      target: r'PaymentMethod',
+      single: true,
     )
   },
   embeddedSchemas: {},
@@ -127,12 +133,14 @@ Id _expenseGetId(Expense object) {
 }
 
 List<IsarLinkBase<dynamic>> _expenseGetLinks(Expense object) {
-  return [object.category];
+  return [object.category, object.paymentMethod];
 }
 
 void _expenseAttach(IsarCollection<dynamic> col, Id id, Expense object) {
   object.id = id;
   object.category.attach(col, col.isar.collection<Category>(), r'category', id);
+  object.paymentMethod
+      .attach(col, col.isar.collection<PaymentMethod>(), r'paymentMethod', id);
 }
 
 extension ExpenseQueryWhereSort on QueryBuilder<Expense, Expense, QWhere> {
@@ -552,6 +560,19 @@ extension ExpenseQueryLinks
   QueryBuilder<Expense, Expense, QAfterFilterCondition> categoryIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'category', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> paymentMethod(
+      FilterQuery<PaymentMethod> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'paymentMethod');
+    });
+  }
+
+  QueryBuilder<Expense, Expense, QAfterFilterCondition> paymentMethodIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'paymentMethod', 0, true, 0, true);
     });
   }
 }
