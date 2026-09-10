@@ -3,6 +3,8 @@ import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
+import 'package:pocket_track/core/payment_method.dart';
+import 'package:pocket_track/core/payment_method_provider.dart';
 import 'package:provider/provider.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -35,6 +37,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget build(BuildContext context) {
     ExpenseProvider db = context.read<ExpenseProvider>();
     List<Category> categories = context.watch<CategoryProvider>().categories;
+    List<PaymentMethod> paymentMethods = context
+        .watch<PaymentMethodProvider>()
+        .paymentMethods;
+    debugPrint('${paymentMethods.length}');
     if (selectedCategory == null && selectedCategoryId != null) {
       for (final category in categories) {
         if (category.id == selectedCategoryId) {
