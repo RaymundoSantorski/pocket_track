@@ -4,7 +4,9 @@ import 'package:pocket_track/core/payment_method_repository.dart';
 
 class PaymentMethodProvider extends ChangeNotifier {
   late PaymentMethodRepository db;
-  PaymentMethodProvider({required this.db});
+  PaymentMethodProvider({required this.db}) {
+    load();
+  }
 
   List<PaymentMethod> paymentMethods = [];
 
