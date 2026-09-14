@@ -20,6 +20,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   int? selectedCategoryId;
   Category? selectedCategory;
+  int? selectedPaymentMethodId;
+  PaymentMethod? selectedPaymentMethod;
   bool isExpense = true;
 
   @override
@@ -30,6 +32,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _descriptionController.text = widget.expense!.description ?? '';
       selectedCategoryId = widget.expense!.category.value?.id;
       isExpense = widget.expense!.isExpense;
+      selectedPaymentMethodId = widget.expense!.category.value?.id;
     }
   }
 
@@ -40,11 +43,19 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     List<PaymentMethod> paymentMethods = context
         .watch<PaymentMethodProvider>()
         .paymentMethods;
-    debugPrint('${paymentMethods.length}');
+
     if (selectedCategory == null && selectedCategoryId != null) {
       for (final category in categories) {
         if (category.id == selectedCategoryId) {
           selectedCategory = category;
+          break;
+        }
+      }
+    }
+    if (selectedPaymentMethod == null && selectedPaymentMethodId != null) {
+      for (final paymentMethod in paymentMethods) {
+        if (paymentMethod.id == selectedCategoryId) {
+          selectedPaymentMethod = paymentMethod;
           break;
         }
       }
@@ -70,6 +81,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ..description = description;
         }
         newExpense.category.value = selectedCategory;
+        newExpense.paymentMethod.value = selectedPaymentMethod;
         db.save(newExpense);
       }
       return true;
@@ -150,20 +162,30 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           ),
                         ),
                       ],
-                      selectedItemBuilder: (context) {
-                        return [
-                          ...categories.map(
-                            (category) => DropdownMenuItem(
-                              onTap: () {},
-                              value: category,
-                              child: Text(category.name),
-                            ),
-                          ),
-                        ];
-                      },
                       onChanged: (Category? value) {
                         setState(() {
                           selectedCategory = value;
+                        });
+                      },
+                    )
+                  : SizedBox.shrink(),
+              paymentMethods.isNotEmpty
+                  ? DropdownButton<PaymentMethod>(
+                      value: selectedPaymentMethod,
+                      items: [
+                        ...paymentMethods.map(
+                          (paymentMethod) => DropdownMenuItem(
+                            onTap: () {
+                              selectedPaymentMethod = paymentMethod;
+                            },
+                            value: paymentMethod,
+                            child: Text(paymentMethod.name),
+                          ),
+                        ),
+                      ],
+                      onChanged: (PaymentMethod? value) {
+                        setState(() {
+                          selectedPaymentMethod = value;
                         });
                       },
                     )
