@@ -60,7 +60,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         }
       }
     }
-    bool handleAdd() {
+    Future<bool> handleAdd() async {
       if (_controller.text.isEmpty) return true;
       double value = double.parse(_controller.text);
       String description = _descriptionController.text;
@@ -80,9 +80,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             ..date = DateTime.now()
             ..description = description;
         }
+        debugPrint(selectedPaymentMethod?.name);
         newExpense.category.value = selectedCategory;
         newExpense.paymentMethod.value = selectedPaymentMethod;
-        db.save(newExpense);
+        await db.save(newExpense);
       }
       return true;
     }
@@ -93,7 +94,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         if (didPop) return;
 
         // Ejecuta tu lógica al hacer pop
-        bool salir = handleAdd();
+        bool salir = await handleAdd();
 
         if (salir) {
           Navigator.pop(

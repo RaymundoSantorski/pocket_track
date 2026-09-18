@@ -3,6 +3,8 @@ import 'package:pocket_track/core/category.dart';
 import 'package:pocket_track/core/category_provider.dart';
 import 'package:pocket_track/core/expense.dart';
 import 'package:pocket_track/core/expense_provider.dart';
+import 'package:pocket_track/core/payment_method.dart';
+import 'package:pocket_track/core/payment_method_provider.dart';
 import 'package:pocket_track/screens/add_expense_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -20,12 +22,20 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
+  final TextEditingController methodController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     final categories = context.read<CategoryProvider>().categories;
     final categoryId = widget.expense.category.value?.id;
+    final methods = context.read<PaymentMethodProvider>().paymentMethods;
+    final methodID = widget.expense.paymentMethod.value?.id;
+
+    final method = methods.cast<PaymentMethod?>().firstWhere(
+      (paymentMethod) => paymentMethod?.id == methodID,
+      orElse: () => null,
+    );
 
     final category = categories.cast<Category?>().firstWhere(
       (category) => category?.id == categoryId,
@@ -35,14 +45,16 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
     descriptionController.text = widget.expense.description?.toString() ?? '';
     categoryController.text = category?.name ?? 'Sin categoria';
     typeController.text = widget.expense.isExpense ? 'Gasto' : 'Ingreso';
+    methodController.text = method?.name ?? 'Sin método de pago';
   }
 
-  Future<void> confirmDelete(
+  Future<bool> confirmDelete(
     BuildContext context,
     ExpenseProvider db,
     Expense expense,
   ) async {
-    return showDialog<void>(
+    bool result = false;
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
@@ -77,7 +89,10 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
                 'Cancelar',
                 style: TextStyle(color: Colors.grey),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop();
+                result = false;
+              },
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -89,6 +104,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
                 Navigator.of(context).pop();
 
                 await db.delete(expense.id);
+                result = true;
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -112,6 +128,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
         );
       },
     );
+    return result;
   }
 
   @override
@@ -144,6 +161,11 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
           TextField(
             controller: typeController,
             decoration: InputDecoration(label: Text('Tipo')),
+            enabled: false,
+          ),
+          TextField(
+            controller: methodController,
+            decoration: InputDecoration(label: Text('Método de pago')),
             enabled: false,
           ),
           // SizedBox(height: 60),
@@ -185,8 +207,8 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
             ),
             child: TextButton.icon(
               onPressed: () async {
-                await confirmDelete(context, db, widget.expense);
-                pop();
+                bool result = await confirmDelete(context, db, widget.expense);
+                if (result) pop();
               },
               label: Text(
                 'Eliminar',
