@@ -27,6 +27,7 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    debugPrint('[DETAILS] ${widget.expense.paymentMethod.value?.name}');
     final categories = context.read<CategoryProvider>().categories;
     final categoryId = widget.expense.category.value?.id;
     final methods = context.read<PaymentMethodProvider>().paymentMethods;
