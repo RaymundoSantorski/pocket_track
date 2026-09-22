@@ -16,6 +16,7 @@ class ExpenseProvider extends ChangeNotifier {
   float totalExpense = 0;
 
   Future<void> save(Expense expense) async {
+    debugPrint('[DB] ${expense.paymentMethod.value?.name}');
     await db.save(expense);
     loadExpenses();
   }

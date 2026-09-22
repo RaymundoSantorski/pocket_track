@@ -9,6 +9,7 @@ class ExpenseRepository {
     await isar.writeTxn(() async {
       await isar.expenses.put(expense);
       await expense.category.save();
+      await expense.paymentMethod.save();
     });
   }
 
