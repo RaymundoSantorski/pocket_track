@@ -116,6 +116,9 @@ class _ExpenseDetailsScreenState extends State<ExpenseDetailsScreen> {
                         label: 'Deshacer',
                         textColor: Colors.white,
                         onPressed: () {
+                          expense.paymentMethod.value =
+                              expense.paymentMethod.value;
+                          expense.category.value = expense.category.value;
                           db.save(expense);
                         },
                       ),

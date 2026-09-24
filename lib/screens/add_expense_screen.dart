@@ -92,8 +92,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       canPop: false, // Evita que el usuario salga inmediatamente
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-
-        // Ejecuta tu lógica al hacer pop
         bool salir = await handleAdd();
 
         if (salir) {
