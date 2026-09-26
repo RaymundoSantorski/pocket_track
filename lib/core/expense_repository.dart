@@ -1,6 +1,13 @@
 import 'package:isar/isar.dart';
 import 'package:pocket_track/core/expense.dart';
 
+/*
+  Estoy muy cansado y no voy a poder concentrarme en una solución
+  Comentario escrito para no perder el habito
+
+  TODO: arreglar guardado del metodo de pago y recuperación sincronizada
+ */
+
 class ExpenseRepository {
   late Isar isar;
   ExpenseRepository({required this.isar});
